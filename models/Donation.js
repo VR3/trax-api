@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const DonationSchema = new mongoose.Schema({
-  date: Number,
+  date: String,
   hour: Number,
   amount: Number,
 });
