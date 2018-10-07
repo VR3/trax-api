@@ -22,8 +22,6 @@ const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 
-http.listen(8080, '127.0.0.1');
-
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
  */
@@ -39,6 +37,7 @@ const donationsController = require('./controllers/donations');
 /**
  * Socket
  */
+io.set('origins', 'http://localhost:3000');
 io.on('connection', (socket) => {
   console.log('Client connected');
   socket.emit('greet', { hello: 'Hey, Mr.Client!' });
