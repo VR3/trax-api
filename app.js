@@ -44,9 +44,9 @@ const socket = io(server, {
   origins: allowedOrigins
 });
 
-socket.on('connection', (socketIO) => {
+socket.on('connect', (socket) => {
   console.log('Client connected');
-  socketIO.on('disconnect', () => console.log('Client disconnected'));
+  socket.on('disconnect', () => console.log('Client disconnected'));
 });
 
 /**
