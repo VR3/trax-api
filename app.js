@@ -75,7 +75,7 @@ db.once('open', () => {
     if (change.operationType === 'insert') {
       const donation = change.fullDocument;
       console.log('Donation ==>', donation);
-      io.emit('donations', donation);
+      socket.emit('donations', donation);
     }
   });
 });
