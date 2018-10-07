@@ -19,8 +19,8 @@ exports.getCollected = (req, res) => {
   Donation.aggregate([{
     $match: {
       date: {
-        $gte: 20161209,
-        $lte: 20161215
+        $gte: '2016-12-09',
+        $lte: '2020-12-15'
       }
     }
   }, {
