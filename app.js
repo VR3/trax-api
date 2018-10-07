@@ -129,6 +129,7 @@ app.use('/webfonts', express.static(path.join(__dirname, 'node_modules/@fortawes
 app.get('/api/donations', donationsController.getDonations);
 app.post('/api/donations', donationsController.postDonation);
 app.get('/api/collected', donationsController.getCollected);
+app.get('/api/centers', donationsController.getCenters);
 
 /**
  * Error Handler.

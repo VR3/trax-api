@@ -1,4 +1,5 @@
 const Donation = require('../models/Donation');
+const Center = require('../models/Center');
 
 exports.getDonations = (req, res) => {
   Donation.find()
@@ -32,4 +33,11 @@ exports.getCollected = (req, res) => {
   ])
     .then(collected => res.json(collected))
     .catch(err => console.log('getCollectedErr', err));
+};
+
+exports.getCenters = (req, res) => {
+  Center.find({})
+    .exec()
+    .then(centers => res.json(centers))
+    .catch(err => console.log('getCentersErr', err));
 };
