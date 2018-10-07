@@ -24,8 +24,6 @@ const io = require('socket.io')(http);
 
 http.listen(8080, '127.0.0.1');
 
-const allowedOrigins = 'http://localhost:* http://127.0.0.1:*';
-
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
  */
@@ -143,9 +141,9 @@ if (process.env.NODE_ENV === 'development') {
 /**
  * Start Express server.
  */
-// app.listen(app.get('port'), () => {
-//   console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env'));
-//   console.log('  Press CTRL-C to stop\n');
-// });
+app.listen(app.get('port'), () => {
+  console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env'));
+  console.log('  Press CTRL-C to stop\n');
+});
 
 module.exports = app;
