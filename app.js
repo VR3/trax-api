@@ -17,7 +17,13 @@ const passport = require('passport');
 const expressValidator = require('express-validator');
 const expressStatusMonitor = require('express-status-monitor');
 const sass = require('node-sass-middleware');
-const SocketServer = require('ws').Server;
+
+const app = express();
+
+const io = require('socket.io');
+const server = require('http').createServer(app);
+
+const allowedOrigins = 'http://localhost:* http://127.0.0.1:*';
 
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
@@ -30,10 +36,18 @@ dotenv.load({ path: '.env.example' });
 
 const donationsController = require('./controllers/donations');
 
+
 /**
- * Create Express server.
+ * Socket
  */
-const app = express();
+const socket = io(server, {
+  origins: allowedOrigins
+});
+
+socket.on('connection', (socketIO) => {
+  console.log('Client connected');
+  socketIO.on('disconnect', () => console.log('Client disconnected'));
+});
 
 /**
  * Connect to MongoDB.
@@ -52,20 +66,16 @@ const db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'Connection Error:'));
 
-const wss = new SocketServer({ server: app });
-wss.on('connection', (ws) => {
-  console.log('Client connected', ws);
-});
 
 db.once('open', () => {
   const donationsCollection = db.collection('donations');
   const changeStream = donationsCollection.watch();
 
   changeStream.on('change', (change) => {
-    console.log('Change', change);
     if (change.operationType === 'insert') {
       const donation = change.fullDocument;
-      wss.emit('donations', donation);
+      console.log('Donation ==>', donation);
+      io.emit('donations', donation);
     }
   });
 });
