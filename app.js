@@ -33,7 +33,6 @@ dotenv.load({ path: '.env.example' });
 
 const donationsController = require('./controllers/donations');
 
-
 /**
  * Socket
  */
@@ -73,9 +72,7 @@ db.once('open', () => {
   changeStream.on('change', (change) => {
     if (change.operationType === 'insert') {
       const donation = change.fullDocument;
-      console.log('Donation ==>', donation);
       io.emit('donations', donation);
-      io.send(donation);
     }
   });
 });
