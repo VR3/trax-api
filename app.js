@@ -74,6 +74,7 @@ db.once('open', () => {
       const donation = change.fullDocument;
       console.log('Donation ==>', donation);
       io.emit('donations', donation);
+      io.send(donation);
     }
   });
 });
