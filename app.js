@@ -41,9 +41,6 @@ const donationsController = require('./controllers/donations');
 /**
  * Socket
  */
-io.configure(() => {
-  io.set('transports', ['websocket']);
-});
 io.on('connection', (socket) => {
   console.log('Client connected');
   socket.emit('greet', { hello: 'Hey, Mr.Client!' });
