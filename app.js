@@ -20,8 +20,10 @@ const sass = require('node-sass-middleware');
 
 const app = express();
 
-const io = require('socket.io');
-const server = require('http').createServer(app);
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
+
+http.listen(8080, '127.0.0.1');
 
 const allowedOrigins = 'http://localhost:* http://127.0.0.1:*';
 
@@ -40,11 +42,7 @@ const donationsController = require('./controllers/donations');
 /**
  * Socket
  */
-const socket = io(server, {
-  origins: allowedOrigins
-});
-
-socket.on('connect', (socket) => {
+io.on('connection', (socket) => {
   console.log('Client connected');
   socket.on('disconnect', () => console.log('Client disconnected'));
 });
@@ -75,7 +73,7 @@ db.once('open', () => {
     if (change.operationType === 'insert') {
       const donation = change.fullDocument;
       console.log('Donation ==>', donation);
-      socket.emit('donations', donation);
+      io.emit('donations', donation);
     }
   });
 });
