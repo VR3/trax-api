@@ -86,6 +86,10 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '/public/index.html'));
+});
+
 
 app.set('host', process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0');
 app.set('port', process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080);

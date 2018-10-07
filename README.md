@@ -5,6 +5,8 @@ Documentación del sistema de monitoreo y visualización de donativos para el Te
 ## REFERENCIA
 ----
 
+Utilizando el **HOST** `https://trax.vr3.io`
+
 ### DONATIONS
  `/api/donation`
 - **POST**
@@ -19,7 +21,7 @@ Documentación del sistema de monitoreo y visualización de donativos para el Te
       Array
 
 ### COLLECTED
- '/api/collected'
+ `/api/collected`
 - **GET**
   Response
     Object
