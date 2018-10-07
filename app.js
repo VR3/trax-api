@@ -41,10 +41,18 @@ const donationsController = require('./controllers/donations');
 /**
  * Socket
  */
-io.set('transports', ['websocket']);
+io.configure(() => {
+  io.set('transports', ['websocket']);
+});
 io.on('connection', (socket) => {
   console.log('Client connected');
-  socket.on('disconnect', () => console.log('Client disconnected'));
+  socket.emit('greet', { hello: 'Hey, Mr.Client!' });
+  socket.on('respond', (data) => {
+    console.log(data);
+  });
+  socket.on('disconnect', () => {
+    console.log('Socket disconnected');
+  });
 });
 
 /**
