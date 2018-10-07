@@ -17,6 +17,7 @@ const passport = require('passport');
 const expressValidator = require('express-validator');
 const expressStatusMonitor = require('express-status-monitor');
 const sass = require('node-sass-middleware');
+const SocketServer = require('ws').Server;
 
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
@@ -45,6 +46,28 @@ mongoose.connection.on('error', (err) => {
   console.error(err);
   console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
   process.exit();
+});
+
+const db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'Connection Error:'));
+
+const wss = new SocketServer({ server: app });
+wss.on('connection', (ws) => {
+  console.log('Client connected', ws);
+});
+
+db.once('open', () => {
+  const donationsCollection = db.collection('donations');
+  const changeStream = donationsCollection.watch();
+
+  changeStream.on('change', (change) => {
+    console.log('Change', change);
+    if (change.operationType === 'insert') {
+      const donation = change.fullDocument;
+      wss.emit('donations', donation);
+    }
+  });
 });
 
 /**
@@ -90,7 +113,6 @@ app.use('/webfonts', express.static(path.join(__dirname, 'node_modules/@fortawes
 app.get('/api/donations', donationsController.getDonations);
 app.post('/api/donations', donationsController.postDonation);
 app.get('/api/collected', donationsController.getCollected);
-
 
 /**
  * Error Handler.
